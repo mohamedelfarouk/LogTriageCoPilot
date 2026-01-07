@@ -1,0 +1,8 @@
+{
+  "summary": "string",
+  "rootCause": "string",
+  "evidence": [{ "line": "string", "reason": "string" }],
+  "fixSuggestions": ["string"],
+  "confidence": 0.0,
+  "nextSteps": ["string"]
+}

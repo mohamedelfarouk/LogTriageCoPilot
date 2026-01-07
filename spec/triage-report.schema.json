@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/triage-report.schema.json",
+  "title": "Triage Report",
+  "type": "object",
+  "properties": {
+    "summary": {
+      "type": "string",
+      "description": "A summarized version of the given log",
+      "minLength": 1
+    },
+    "rootCause": {
+      "type": "string",
+      "description": "The identified root cause of the issue in the log",
+      "minLength": 1
+    },
+    "evidence": {
+      "type": "array",
+      "description": "Lines from the log that support the identified root cause",
+      "items": {
+        "type": "object",
+        "properties": {
+          "line": {
+            "type": "string",
+            "description": "A specific line from the log",
+            "minLength": 1
+          },
+          "reason": {
+            "type": "string",
+            "description": "Explanation of why this line is relevant to the root cause",
+            "minLength": 1
+          }
+        },
+        "required": ["line", "reason"],
+        "additionalProperties": false
+      },
+      "minItems": 1,
+      "maxItems": 20
+    },
+    "fixSuggestions": {
+      "type": "array",
+      "description": "Suggested fixes to resolve the identified issue",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "maxItems": 10
+    },
+    "confidence": {
+      "type": "number",
+      "description": "A confidence score (0.0 to 1.0) indicating the certainty of the root cause identification",
+      "minimum": 0.0,
+      "maximum": 1.0
+    },
+    "nextSteps": {
+      "type": "array",
+      "description": "Recommended next steps for further investigation or resolution",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "maxItems": 10
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "summary",
+    "rootCause",
+    "evidence",
+    "fixSuggestions",
+    "confidence",
+    "nextSteps"
+  ]
+}

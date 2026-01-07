@@ -1,0 +1,22 @@
+2026-01-07 14:23:44.980 [http-nio-8080-exec-2] INFO  c.e.controller.HealthController - Health check ping received from load balancer. Status: UP.
+2026-01-07 14:23:45.055 [http-nio-8080-exec-5] INFO  c.e.filter.RequestLoggingFilter - Incoming request: GET /api/v1/users/profile/9921 [RequestId: req-a1b2-c3d4]
+2026-01-07 14:23:45.058 [http-nio-8080-exec-5] DEBUG c.e.security.JwtAuthenticationProvider - Token validation successful for subject: user_9921
+2026-01-07 14:23:45.060 [http-nio-8080-exec-5] DEBUG c.e.controller.UserController - Validating path variable 'userId'. Value: 9921
+2026-01-07 14:23:45.062 [scheduling-1] WARN  c.e.cache.RedisCacheManager - Cache key 'global_config_feature_flags' is expiring soon. Refresh recommended.
+2026-01-07 14:23:45.080 [http-nio-8080-exec-5] INFO  c.e.service.UserProfileService - Fetching raw user entity from database for ID: 9921
+2026-01-07 14:23:45.095 [http-nio-8080-exec-5] DEBUG c.e.repository.UserRepository - Hibernate: select u1_0.id, u1_0.email, u1_0.name from users u1_0 where u1_0.id=?
+2026-01-07 14:23:45.102 [http-nio-8080-exec-5] ERROR c.e.service.UserProfileService - An unexpected error occurred while processing user request.
+java.lang.NullPointerException: Cannot invoke "String.toUpperCase()" because "user.getEmail()" is null
+    at com.example.service.UserProfileService.formatUserData(UserProfileService.java:42)
+    at com.example.service.UserProfileService.getUserDetails(UserProfileService.java:28)
+    at com.example.controller.UserController.getUser(UserController.java:15)
+    at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+    at jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+    at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:205)
+    ... 45 more
+2026-01-07 14:23:45.105 [http-nio-8080-exec-5] ERROR o.s.w.s.DispatcherServlet - Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed]
+2026-01-07 14:23:45.108 [http-nio-8080-exec-5] INFO  c.e.exception.GlobalExceptionHandler - Resolving exception to HTTP 500 Internal Server Error.
+2026-01-07 14:23:45.110 [http-nio-8080-exec-5] INFO  c.e.filter.RequestLoggingFilter - Completed request: GET /api/v1/users/profile/9921 [RequestId: req-a1b2-c3d4] - Duration: 55ms
+2026-01-07 14:23:45.200 [http-nio-8080-exec-9] INFO  c.e.filter.RequestLoggingFilter - Incoming request: POST /api/v1/orders [RequestId: req-x9y8-z7w6]
+2026-01-07 14:23:45.205 [http-nio-8080-exec-9] DEBUG c.e.controller.OrderController - Payload validation passed. Item count: 3.
+2026-01-07 14:23:46.000 [scheduling-1] INFO  c.e.job.AnalyticsSyncJob - Scheduled analytics sync started.

@@ -1,0 +1,28 @@
+{
+  "summary": "The daily sales analytics report generation failed to complete within the 10-second timeout window, triggering a graceful fallback to cached Redis data.",
+  "rootCause": "The SQL query execution exceeded the configured 10,000ms timeout threshold, resulting in an 'ORA-01013' (Client told Oracle to abort; most likely due to a timeout setting) error from the Oracle database.",
+  "evidence": [
+    {
+      "line": "DEBUG c.e.repository.AnalyticsRepository - Execution Plan: Using generic connection pool. Timeout set to 10000ms.",
+      "reason": "Establishes the configured constraint for the operation."
+    },
+    {
+      "line": "Caused by: java.sql.SQLTimeoutException: ORA-01013: user requested cancel of current operation",
+      "reason": "Confirms the database operation was forcibly cancelled due to the timeout."
+    },
+    {
+      "line": "WARN ... - Query execution has exceeded the warning threshold of 8000ms.",
+      "reason": "Warning precursor indicating query performance degradation."
+    }
+  ],
+  "fixSuggestions": [
+    "Analyze and optimize the SQL query used in 'AnalyticsRepository' for daily sales.",
+    "Add database indices to columns used in the report's WHERE or JOIN clauses.",
+    "Consider pre-calculating the report data asynchronously if real-time generation consistently times out."
+  ],
+  "confidence": 0.95,
+  "nextSteps": [
+    "Retrieve the specific SQL query from the codebase.",
+    "Run an EXPLAIN PLAN on the query in the production replica to identify bottlenecks."
+  ]
+}

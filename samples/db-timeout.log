@@ -1,0 +1,24 @@
+2026-01-07 18:20:02.500 [http-nio-8080-exec-10] INFO  c.e.filter.RequestLoggingFilter - Incoming request: GET /api/v1/analytics/sales/daily [RequestId: req-b9c8-d7e6]
+2026-01-07 18:20:02.520 [http-nio-8080-exec-10] DEBUG c.e.security.SecurityContext - User 'admin_user' authorized for scope: ANALYTICS_READ
+2026-01-07 18:20:02.545 [http-nio-8080-exec-10] INFO  c.e.service.AnalyticsService - Starting daily sales report generation for date: 2026-01-07
+2026-01-07 18:20:02.550 [http-nio-8080-exec-10] DEBUG c.e.repository.AnalyticsRepository - Execution Plan: Using generic connection pool. Timeout set to 10000ms.
+2026-01-07 18:20:05.100 [scheduling-1] INFO  c.e.tasks.EmailNotificationTask - Batch email processing: 0 emails sent. Queue empty.
+2026-01-07 18:20:08.200 [http-nio-8080-exec-4] INFO  c.e.controller.ProductController - Product catalog update received for ID: 5541.
+2026-01-07 18:20:12.500 [http-nio-8080-exec-10] WARN  c.e.config.DataSourceConfig - Query execution has exceeded the warning threshold of 8000ms.
+2026-01-07 18:20:12.550 [http-nio-8080-exec-10] ERROR c.e.repository.AnalyticsRepository - Failed to retrieve daily sales report.
+org.springframework.dao.QueryTimeoutException: Redispatching to fallback; nested exception is java.sql.SQLTimeoutException: The query has timed out.
+    at org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator.doTranslate(SQLErrorCodeSQLExceptionTranslator.java:251)
+    at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:70)
+    at org.hibernate.exception.internal.StandardSQLExceptionConverter.convert(StandardSQLExceptionConverter.java:42)
+    at org.hibernate.engine.jdbc.spi.SqlExceptionHelper.convert(SqlExceptionHelper.java:113)
+Caused by: java.sql.SQLTimeoutException: ORA-01013: user requested cancel of current operation
+    at oracle.jdbc.driver.T4CTTIoer11.processError(T4CTTIoer11.java:629)
+    at oracle.jdbc.driver.T4CTTIoer11.processError(T4CTTIoer11.java:563)
+    at oracle.jdbc.driver.T4C8Oall.processError(T4C8Oall.java:1150)
+    ... 62 more
+2026-01-07 18:20:12.555 [http-nio-8080-exec-10] INFO  c.e.service.AnalyticsService - Transaction rolled back due to query timeout.
+2026-01-07 18:20:12.558 [http-nio-8080-exec-10] WARN  c.e.service.AnalyticsService - Attempting to serve stale data from Redis cache (fallback strategy).
+2026-01-07 18:20:12.565 [http-nio-8080-exec-10] DEBUG c.e.cache.RedisService - Cache HIT for key: analytics_daily_sales_20260107
+2026-01-07 18:20:12.570 [http-nio-8080-exec-10] INFO  c.e.filter.RequestLoggingFilter - Completed request: GET /api/v1/analytics/sales/daily [RequestId: req-b9c8-d7e6] - Status: 200 OK (Degraded)
+2026-01-07 18:20:13.000 [http-nio-8080-exec-2] INFO  c.e.controller.HealthController - Liveness probe check passed.
+2026-01-07 18:20:13.150 [http-nio-8080-exec-8] INFO  c.e.security.AuthService - Login attempt for user: jdoe@example.com

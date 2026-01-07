@@ -1,0 +1,39 @@
+{
+  "incidentTitle": "DB Timeout in AnalyticsRepository (Oracle)",
+  "timeWindow": {
+    "firstTimestamp": "2026-01-07 18:20:02.500",
+    "lastTimestamp": "2026-01-07 18:20:12.570"
+  },
+  "requestIds": ["req-b9c8-d7e6"],
+  "primaryErrorLine": "2026-01-07 18:20:12.550 [http-nio-8080-exec-10] ERROR c.e.repository.AnalyticsRepository - Failed to retrieve daily sales report.",
+  "primaryException": {
+    "class": "org.springframework.dao.QueryTimeoutException",
+    "message": "Redispatching to fallback; nested exception is java.sql.SQLTimeoutException: The query has timed out."
+  },
+  "topAppFrames": [
+    "org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator.doTranslate(SQLErrorCodeSQLExceptionTranslator.java:251)",
+    "org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:70)",
+    "org.hibernate.exception.internal.StandardSQLExceptionConverter.convert(StandardSQLExceptionConverter.java:42)"
+  ],
+  "causedByChain": [
+    {
+      "class": "java.sql.SQLTimeoutException",
+      "message": "ORA-01013: user requested cancel of current operation"
+    }
+  ],
+  "signals": [
+    "2026-01-07 18:20:02.500 [http-nio-8080-exec-10] INFO  c.e.filter.RequestLoggingFilter - Incoming request: GET /api/v1/analytics/sales/daily [RequestId: req-b9c8-d7e6]",
+    "2026-01-07 18:20:02.545 [http-nio-8080-exec-10] INFO  c.e.service.AnalyticsService - Starting daily sales report generation for date: 2026-01-07",
+    "2026-01-07 18:20:02.550 [http-nio-8080-exec-10] DEBUG c.e.repository.AnalyticsRepository - Execution Plan: Using generic connection pool. Timeout set to 10000ms.",
+    "2026-01-07 18:20:12.500 [http-nio-8080-exec-10] WARN  c.e.config.DataSourceConfig - Query execution has exceeded the warning threshold of 8000ms.",
+    "2026-01-07 18:20:12.550 [http-nio-8080-exec-10] ERROR c.e.repository.AnalyticsRepository - Failed to retrieve daily sales report.",
+    "2026-01-07 18:20:12.555 [http-nio-8080-exec-10] INFO  c.e.service.AnalyticsService - Transaction rolled back due to query timeout.",
+    "2026-01-07 18:20:12.558 [http-nio-8080-exec-10] WARN  c.e.service.AnalyticsService - Attempting to serve stale data from Redis cache (fallback strategy).",
+    "2026-01-07 18:20:12.565 [http-nio-8080-exec-10] DEBUG c.e.cache.RedisService - Cache HIT for key: analytics_daily_sales_20260107",
+    "2026-01-07 18:20:12.570 [http-nio-8080-exec-10] INFO  c.e.filter.RequestLoggingFilter - Completed request: GET /api/v1/analytics/sales/daily [RequestId: req-b9c8-d7e6] - Status: 200 OK (Degraded)"
+  ],
+  "componentsDetected": ["Oracle", "Redis", "SpringJDBC", "Hibernate"],
+  "securityFlags": [],
+  "noiseDroppedCount": 4,
+  "notes": "Query timed out (ORA-01013) but system recovered gracefully by serving stale data from Redis. Response was 200 OK (Degraded)."
+}
