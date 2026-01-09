@@ -4,7 +4,7 @@
     "firstTimestamp": "2026-01-07 19:05:01.205",
     "lastTimestamp": "2026-01-07 19:05:05.100"
   },
-  "requestIds": [],
+  "requestIds": ["Order #9921", "Product #551"],
   "primaryErrorLine": "2026-01-07 19:05:02.300 [http-nio-8080-exec-2] ERROR c.e.config.RedisConfiguration - Unable to connect to Redis instance at 10.0.0.5:6379",
   "primaryException": {
     "class": "io.lettuce.core.RedisConnectionException",

@@ -139,4 +139,49 @@ public class LogAnalyzer {
             }
         }
     }
+
+    /**
+     * Filters out "Happy Path" logs (DEBUG, Success messages) to reduce noise.
+     * Returns the number of events dropped.
+     */
+    private int filterNoise(ArrayList<Event> window) {
+        int droppedCount = 0;
+
+        // We use an iterator (or a reverse loop) to safely remove items while looping
+        for (int i = window.size() - 1; i >= 0; i--) {
+            Event e = window.get(i);
+
+            // RULE 1: Never drop High Severity or Security Risks
+            if (e.isSecurityRisk() || "ERROR".equals(e.getLevel()) || "WARN".equals(e.getLevel())) {
+                continue; // Keep it
+            }
+
+            // RULE 2: Drop all DEBUG events (unless they were security risks, handled above)
+            if ("DEBUG".equals(e.getLevel())) {
+                window.remove(i);
+                droppedCount++;
+                continue;
+            }
+
+            // RULE 3: Drop "Happy" INFO messages
+            if ("INFO".equals(e.getLevel())) {
+                String msg = e.getMessage().toLowerCase();
+                if (msg.contains("success") || msg.contains("approved") || msg.contains("validated")) {
+                    window.remove(i);
+                    droppedCount++;
+                }
+            }
+        }
+        return droppedCount;
+    }
+
+    public LogBundle triage (ArrayList<Event> allEvents) {
+        if (allEvents == null || allEvents.isEmpty()) return null;
+        Event anchor =  selectAnchor(allEvents);
+        ArrayList<Event> window = getWindow(allEvents, anchor);
+        if (window == null) return null;
+        scanForSecurity(window);
+        int noiseDroppedCount = filterNoise(window);
+        return new LogBundle(anchor, window,  noiseDroppedCount);
+    }
 }
