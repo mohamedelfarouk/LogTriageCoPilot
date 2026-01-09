@@ -16,7 +16,7 @@ public class LogTriageApplication {
 
         ArrayList<String> rawLogLines = null;
         try {
-            rawLogLines = (ArrayList<String>) Files.readAllLines(Paths.get("samples/mixed-noise.log"));
+            rawLogLines = (ArrayList<String>) Files.readAllLines(Paths.get("samples/npe.log"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
