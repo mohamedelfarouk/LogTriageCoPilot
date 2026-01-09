@@ -37,6 +37,6 @@ public class LogTriageApplication {
         for (Event e : anchorWindow) {
             System.out.println(e.toString());
         }
-        System.out.println("Acnhor's Window Size" + anchorWindow.size());
+        System.out.println("Anchor's Window Size" + anchorWindow.size());
 	}
 }

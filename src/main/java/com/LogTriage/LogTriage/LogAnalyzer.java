@@ -1,6 +1,8 @@
 package com.LogTriage.LogTriage;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class LogAnalyzer {
 
@@ -108,5 +110,33 @@ public class LogAnalyzer {
         }
 
         return window;
+    }
+
+//    private static final String[] SECURITY_KEYWORDS = {
+//            "ignore previous instructions",
+//            "system prompt",
+//            "output your rules",
+//            "forget all rules"
+//    };
+
+    private static final Pattern SECURITY_PATTERN = Pattern.compile(
+            "(?i)" + // Turn on case insensitivity
+                    "ignore\\s+(all\\s+)?previous\\s+instructions|" +
+                    "system\\s+prompt|" +
+                    "system\\s+override|" +
+                    "reveal\\s+prompt|" +
+                    "developer\\s+mode|" +
+                    "forget\\s+all\\s+rules"
+    );
+
+    public void scanForSecurity(ArrayList<Event> window) {
+        for (Event e : window) {
+            if (e.getMessage() != null) {
+                Matcher matcher = SECURITY_PATTERN.matcher(e.getMessage());
+                if (matcher.find()) {
+                    e.setSecurityRisk(true);
+                }
+            }
+        }
     }
 }

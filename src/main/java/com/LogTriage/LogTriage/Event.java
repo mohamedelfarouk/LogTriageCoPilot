@@ -11,6 +11,7 @@ public class Event {
     private String message;
     private String requestId;
     private String exceptionClass;
+    private boolean isSecurityRisk;
 
     private ArrayList<String> rawLines = new ArrayList<>();
 
@@ -26,6 +27,7 @@ public class Event {
         this.message = message;
         this.requestId = requestId;
         this.exceptionClass = exceptionClass;
+        this.isSecurityRisk = false;
     }
 
     public void addRawLine(String rawLine){
@@ -37,9 +39,10 @@ public class Event {
         return "Event{" +
                 "timestamp='" + timestamp + '\'' +
                 ", level='" + level + '\'' +
-                ", requestId='" + requestId + '\'' +       // <--- ADD THIS
-                ", exceptionClass='" + exceptionClass + '\'' + // <--- ADD THIS
+                ", requestId='" + requestId + '\'' +
+                ", exceptionClass='" + exceptionClass + '\'' +
                 ", message='" + message + '\'' +
+                ", IsItASecurityRisk?='" + isSecurityRisk + '\'' +
                 '}';
     }
 
@@ -53,6 +56,14 @@ public class Event {
 
     public String getThread() {
         return thread;
+    }
+
+    public boolean isSecurityRisk() {
+        return isSecurityRisk;
+    }
+
+    public void setSecurityRisk(boolean securityRisk) {
+        isSecurityRisk = securityRisk;
     }
 
     public void setThread(String thread) {
