@@ -79,4 +79,34 @@ public class LogAnalyzer {
         }
         return false;
     }
+
+    public ArrayList<Event> getWindow(ArrayList<Event> allEvents, Event anchor) {
+        ArrayList<Event> window = new ArrayList<>();
+
+        if (anchor.getRequestId() != null && !anchor.getRequestId().isEmpty()) {
+            for (Event e : allEvents) {
+                if (anchor.getRequestId().equals(e.getRequestId())) {
+                    window.add(e);
+                }
+            }
+        }
+        else {
+            int anchorIndex = allEvents.indexOf(anchor);
+
+            // Safety Check: If anchor isn't in the list for some reason
+            if (anchorIndex == -1) {
+                return window; // Return empty, don't crash
+            }
+
+            // Calculate boundaries (Math.max prevents -1, Math.min prevents overflow)
+            int startIndex = Math.max(0, anchorIndex - 10);
+            int endIndex = Math.min(allEvents.size() - 1, anchorIndex + 10);
+
+            for (int i = startIndex; i <= endIndex; i++) {
+                window.add(allEvents.get(i));
+            }
+        }
+
+        return window;
+    }
 }

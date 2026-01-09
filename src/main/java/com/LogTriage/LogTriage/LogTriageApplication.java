@@ -27,5 +27,16 @@ public class LogTriageApplication {
 		for (Event e : events) {
 			System.out.println(e.toString());
 		}
+
+        LogAnalyzer analyzer = new LogAnalyzer();
+        Event anchor = analyzer.selectAnchor(events);
+        ArrayList<Event> anchorWindow = analyzer.getWindow(events, anchor);
+        System.out.println("--------Anchor Part--------");
+        System.out.println(anchor.toString());
+        System.out.println("--------Anchor's Window Part--------");
+        for (Event e : anchorWindow) {
+            System.out.println(e.toString());
+        }
+        System.out.println("Acnhor's Window Size" + anchorWindow.size());
 	}
 }
