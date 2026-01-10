@@ -1,8 +1,25 @@
 {
-  "summary": "string",
-  "rootCause": "string",
-  "evidence": [{ "line": "string", "reason": "string" }],
-  "fixSuggestions": ["string"],
-  "confidence": 0.0,
-  "nextSteps": ["string"]
+  "incidentTitle": "RedisConnectionException in c.e.config.RedisConfiguration",
+  "timeWindow": {
+    "firstTimestamp": "2026-01-07 19:05:01.200",
+    "lastTimestamp": "2026-01-07 19:05:05.100"
+  },
+  "requestIds": ["Order #9921", "User #4402"],
+  "primaryErrorLine": "2026-01-07 19:05:02.300 ERROR c.e.config.RedisConfiguration - Unable to connect",
+  "primaryException": {
+    "class": "io.lettuce.core.RedisConnectionException",
+    "message": "Unable to connect to Redis instance"
+  },
+  "topAppFrames": [
+    "io.lettuce.core.RedisConnectionException.create(RedisConnectionException.java:78)"
+  ],
+  "causedByChain": [],
+  "signals": [
+    "2026-01-07 19:05:01.200 INFO  Request received",
+    "2026-01-07 19:05:02.300 ERROR Unable to connect"
+  ],
+  "componentsDetected": ["Redis", "Lettuce"],
+  "securityFlags": [],
+  "noiseDroppedCount": 2,
+  "notes": "Incident contains potential PROMPT INJECTION patterns."
 }

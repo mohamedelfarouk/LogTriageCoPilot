@@ -25,5 +25,8 @@ public class LogTriageApplication {
 
         System.out.println("\n--- FINAL TRIAGE REPORT ---");
         System.out.println(bundle);
+
+        SchemaValidator schemaValidator = new SchemaValidator();
+        boolean isSchemaValid = schemaValidator.validate("golden/db-timeout.reportv2.json", "spec/triage-report.schema.json");
 	}
 }

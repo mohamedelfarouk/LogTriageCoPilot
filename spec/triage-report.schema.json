@@ -4,73 +4,83 @@
   "title": "Triage Report",
   "type": "object",
   "properties": {
-    "summary": {
+    "incidentTitle": {
       "type": "string",
-      "description": "A summarized version of the given log",
-      "minLength": 1
+      "description": "The headline summary of the crash"
     },
-    "rootCause": {
-      "type": "string",
-      "description": "The identified root cause of the issue in the log",
-      "minLength": 1
+    "timeWindow": {
+      "type": "object",
+      "properties": {
+        "firstTimestamp": { "type": "string" },
+        "lastTimestamp": { "type": "string" }
+      },
+      "required": ["firstTimestamp", "lastTimestamp"]
     },
-    "evidence": {
+    "requestIds": {
       "type": "array",
-      "description": "Lines from the log that support the identified root cause",
+      "items": { "type": "string" }
+    },
+    "primaryErrorLine": {
+      "type": "string"
+    },
+    "primaryException": {
+      "type": "object",
+      "properties": {
+        "class": { "type": "string" },
+        "message": { "type": "string" }
+      },
+      "required": ["class", "message"]
+    },
+    "topAppFrames": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "causedByChain": {
+      "type": "array",
       "items": {
         "type": "object",
         "properties": {
-          "line": {
-            "type": "string",
-            "description": "A specific line from the log",
-            "minLength": 1
-          },
-          "reason": {
-            "type": "string",
-            "description": "Explanation of why this line is relevant to the root cause",
-            "minLength": 1
-          }
+          "class": { "type": "string" },
+          "message": { "type": "string" }
         },
-        "required": ["line", "reason"],
-        "additionalProperties": false
-      },
-      "minItems": 1,
-      "maxItems": 20
+        "required": ["class", "message"]
+      }
     },
-    "fixSuggestions": {
+    "signals": {
       "type": "array",
-      "description": "Suggested fixes to resolve the identified issue",
-      "items": {
-        "type": "string",
-        "minLength": 1
-      },
-      "minItems": 1,
-      "maxItems": 10
+      "description": "The context log lines",
+      "items": { "type": "string" }
     },
-    "confidence": {
-      "type": "number",
-      "description": "A confidence score (0.0 to 1.0) indicating the certainty of the root cause identification",
-      "minimum": 0.0,
-      "maximum": 1.0
-    },
-    "nextSteps": {
+    "componentsDetected": {
       "type": "array",
-      "description": "Recommended next steps for further investigation or resolution",
+      "items": { "type": "string" }
+    },
+    "securityFlags": {
+      "type": "array",
       "items": {
-        "type": "string",
-        "minLength": 1
-      },
-      "minItems": 1,
-      "maxItems": 10
+        "type": "object",
+        "properties": {
+          "type": { "type": "string" },
+          "line": { "type": "string" }
+        },
+        "required": ["type", "line"]
+      }
+    },
+    "noiseDroppedCount": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "notes": {
+      "type": "string"
     }
   },
-  "additionalProperties": false,
   "required": [
-    "summary",
-    "rootCause",
-    "evidence",
-    "fixSuggestions",
-    "confidence",
-    "nextSteps"
-  ]
+    "incidentTitle",
+    "timeWindow",
+    "primaryErrorLine",
+    "signals",
+    "componentsDetected",
+    "noiseDroppedCount"
+  ],
+  "additionalProperties": false
 }
