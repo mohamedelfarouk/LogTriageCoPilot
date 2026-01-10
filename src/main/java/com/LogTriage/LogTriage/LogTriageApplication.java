@@ -11,22 +11,60 @@ import java.util.ArrayList;
 @SpringBootApplication
 public class LogTriageApplication {
 
-	public static void main(String[] args) throws IOException {
-		SpringApplication.run(LogTriageApplication.class, args);
+    public static void main(String[] args) {
+        SpringApplication.run(LogTriageApplication.class, args);
 
-        ArrayList<String> rawLogLines = (ArrayList<String>) Files.readAllLines(Paths.get("samples/mixed-noise.log"));
+        if (args.length < 2) {
+            printUsage();
+            return;
+        }
+
+        String command = args[0];  // e.g., "bundle"
+        String filePath = args[1]; // e.g., "samples/mixed-noise.log"
+
+        try {
+            switch (command) {
+                case "bundle":
+                    runBundle(filePath);
+                    break;
+                case "report":
+                    System.out.println("Coming soon: AI Report generation.");
+                    break;
+                default:
+                    System.out.println("Unknown command: " + command);
+                    printUsage();
+            }
+        } catch (IOException e) {
+            System.err.println("❌ Error reading file: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("❌ Unexpected error: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+
+    private static void runBundle(String filePath) throws IOException {
+        System.out.println("Processing file: " + filePath);
+        ArrayList<String> lines = new ArrayList<>(Files.readAllLines(Paths.get(filePath)));
 
         LogParser parser = new LogParser();
-		ArrayList<Event> events = parser.parse(rawLogLines);
-        System.out.println("Parsed " + events.size() + " events.");
+        ArrayList<Event> events = parser.parse(lines);
 
         LogAnalyzer analyzer = new LogAnalyzer();
         LogBundle bundle = analyzer.triage(events);
 
-        System.out.println("\n--- FINAL TRIAGE REPORT ---");
-        System.out.println(bundle);
+        if (bundle != null) {
+            System.out.println("\n--- FINAL TRIAGE REPORT ---");
+            System.out.println(bundle);
+        } else {
+            System.out.println("No significant incidents found.");
+        }
+    }
 
-        SchemaValidator schemaValidator = new SchemaValidator();
-        boolean isSchemaValid = schemaValidator.validate("golden/db-timeout.reportv2.json", "spec/triage-report.schema.json");
-	}
+    private static void printUsage() {
+        System.out.println("\n--- LOG TRIAGE CLI ---");
+        System.out.println("Usage:");
+        System.out.println("  bundle <path-to-log>   : Generate a JSON triage bundle");
+        System.out.println("  report <path-to-log>   : (Future) Generate AI report");
+    }
 }
